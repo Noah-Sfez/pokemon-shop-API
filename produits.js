@@ -87,7 +87,6 @@ stats.forEach((stat, index) => {
         btnPanier.addEventListener("click", () => {
             // Récupère le tableau de tous les pokémons sélectionnés jusqu'à présent
             let panier = JSON.parse(localStorage.getItem("panier")) || [];
-        
             // Récupère le dernier pokémon sélectionné
             const nouveauPokemon = JSON.parse(localStorage.getItem("pokemon"));
             if (nouveauPokemon === null) {
@@ -100,14 +99,11 @@ stats.forEach((stat, index) => {
                 price: nouveauPokemon[1],
                 image: nouveauPokemon[2]
             };
-        
             // Ajoute le nouveau Pokémon au panier existant
             panier.push(pokemonData);
-        
             // Sauvegarde le panier mis à jour dans le local storage
             localStorage.setItem("panier", JSON.stringify(panier));
             console.log("Après mise à jour, panier contient : ", panier);
-        
             // Redirection vers la page panier.html après un court délai
             setTimeout(() => {
                 window.location.href = "panier.html";
@@ -115,10 +111,7 @@ stats.forEach((stat, index) => {
         });
 
         ajoutContinue.addEventListener("click", () => {
-            // Récupère le tableau de tous les pokémons sélectionnés jusqu'à présent
             let panier = JSON.parse(localStorage.getItem("panier")) || [];
-        
-            // Récupère le dernier pokémon sélectionné
             const nouveauPokemon = JSON.parse(localStorage.getItem("pokemon"));
             if (nouveauPokemon === null) {
                 console.log("Aucun nouveau Pokémon à ajouter");
@@ -130,14 +123,8 @@ stats.forEach((stat, index) => {
                 price: nouveauPokemon[1],
                 image: nouveauPokemon[2]
             };
-        
-            // Ajoute le nouveau Pokémon au panier existant
             panier.push(pokemonData);
-        
-            // Sauvegarde le panier mis à jour dans le local storage
             localStorage.setItem("panier", JSON.stringify(panier));
-        
-            // Redirection vers la page panier.html après un court délai
             setTimeout(() => {
                 window.location.href = "index.html";
             }, 500);

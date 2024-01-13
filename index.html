@@ -11,18 +11,30 @@
         
         <nav>
             <a href="index.html" class="logo-a"><img src="./images/pokemon-logo-pokemon-icon-transparent-free-png.webp" alt=""  class="logo"></a>
-            <a href="panier.html" class="panier-a"><img src="./images/panier.png" alt=""  class="panier"></a>
-            <p id="nb-panier">0</p>
+            <div class="affichagePanier">
+                <p id="nb-panier">0</p>
+                <a href="panier.html" class="panier-a"><img src="./images/panier.png" alt=""  class="panier"></a>
+            </div>
         </nav>
     </header>
-    <select name="" id="tri">
-        <option value="default">Trier par</option>
-        <option value="plus">Plus chères</option>
-        <option value="moins">Moins chères</option>
-    </select>
+    <div class="selectionPokemon">
+        <select name="" id="tri">
+            <option value="default">Trier par</option>
+            <option value="plus">Plus chères</option>
+            <option value="moins">Moins chères</option>
+        </select>
+        <div class="multipleSelect">
+            <button id="select-pokemon">Sélectionner</button>
+            <button id="add-to-cart" style="display:none;">Ajouter au panier</button>
+        </div>
+    </div>
+    
+    
     <div id="exposition">
 
     </div>
+
+    
 
 <script src="script.js"></script>
 </body>

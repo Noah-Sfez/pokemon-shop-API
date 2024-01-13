@@ -92,9 +92,12 @@ tri.addEventListener("change", (event) => {
      });
 
     // au click sur le bouton on passe à la page produits.html  
-    
+    let isSelectMode = false;
     const pokemonChoisi = document.querySelector("#exposition");
     pokemonChoisi.addEventListener("click", (event) => {
+        if (isSelectMode) {
+            return;
+        }
     const pokemonChoisi = event.target.parentElement;
     const pokemonImage = pokemonChoisi.querySelector("img").getAttribute("src");
     const pokemonName = pokemonChoisi.querySelector("span").textContent;
@@ -141,3 +144,95 @@ tri.addEventListener("change", (event) => {
         console.log(panier);
       }
       panier(); // Don't forget to call the function
+
+
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const selectButton = document.getElementById('select-pokemon');
+        const addToCartButton = document.getElementById('add-to-cart');
+        const exposition = document.querySelector("#exposition");
+        const nbrSelected = document.getElementById('nbrSelected'); 
+    
+        selectButton.addEventListener('click', () => {
+            isSelectMode = !isSelectMode; // Basculez l'état du mode
+            selectButton.textContent = isSelectMode ? "Désélectionner" : "Sélectionner";
+            const allPokemon = exposition.querySelectorAll("li");
+        
+            if (isSelectMode) {
+                // Mode Sélectionner
+                selectButton.textContent = "Désélectionner";
+                addToCartButton.style.display = 'block';
+        
+                allPokemon.forEach(pokemonElement => {
+                    // Créer et ajouter la checkbox si elle n'existe pas déjà
+                    let checkbox = pokemonElement.querySelector('.pokemon-checkbox');
+                    if (!checkbox) {
+                        checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'pokemon-checkbox';
+                        pokemonElement.insertBefore(checkbox, pokemonElement.firstChild);
+                    }
+                    
+                    // Ajouter un écouteur d'événements pour la case à cocher
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            pokemonElement.classList.add('checked-pokemon');
+                        } else {
+                            pokemonElement.classList.remove('checked-pokemon');
+                        }
+                    });
+                });
+            } else {
+                // Mode Désélectionner
+                selectButton.textContent = "Sélectionner";
+                addToCartButton.style.display = 'none';
+        
+                allPokemon.forEach(pokemonElement => {
+                    pokemonElement.classList.remove('checked-pokemon'); // Retirer la classe lors de la désélection
+                    const checkbox = pokemonElement.querySelector('.pokemon-checkbox');
+                    if (checkbox) {
+                        checkbox.parentElement.removeChild(checkbox);
+                    }
+                });
+            }
+        });
+    
+        addToCartButton.addEventListener('click', () => {
+            // ... Votre logique pour ajouter au panier ...
+            let panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+    // Récupérer tous les Pokémon sélectionnés
+    const selectedCheckboxes = document.querySelectorAll(".pokemon-checkbox:checked");
+    selectedCheckboxes.forEach(checkbox => {
+        const pokemonElement = checkbox.closest('li');
+        const pokemonName = pokemonElement.querySelector("span").textContent;
+        const pokemonPrice = pokemonElement.querySelector("input[type='text']").value;
+        const pokemonImage = pokemonElement.querySelector("img").getAttribute("src");
+        // Créer un objet pour le Pokémon sélectionné
+        const pokemonData = {
+            name: pokemonName,
+            price: pokemonPrice,
+            image: pokemonImage
+        };
+        // Ajouter le Pokémon au panier
+        panier.push(pokemonData);
+    });
+
+    // Vérifier s'il y a des Pokémon sélectionnés
+    if (panier.length === 0) {
+        console.log("Aucun Pokémon sélectionné à ajouter au panier");
+        return;
+    }
+
+    // Sauvegarder le panier mis à jour dans le localStorage
+    localStorage.setItem("panier", JSON.stringify(panier));
+    console.log("Après mise à jour, panier contient : ", panier);
+
+    // Redirection vers la page panier.html après un court délai
+    setTimeout(() => {
+        window.location.href = "panier.html";
+    }, 500);
+        });
+    });
+    
