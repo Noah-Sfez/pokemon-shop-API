@@ -23,12 +23,13 @@ function loadPanierFromLocalStorage() {
 
 function showPanier() {
     const panierDiv = document.querySelector("#liste-panier");
+    const titlePanier = document.querySelector(".title-panier");
     let panier = JSON.parse(localStorage.getItem("panier"));
-    if (panier === null) {
-        // changer le contenu du texte .title-panier
-        const titlePanier = document.querySelector(".title-panier");
-        titlePanier.textContent = "Votre panier est vide";
-        return;
+    if (!panier || panier.length === 0) {
+        titlePanier.textContent = "Votre panier est vide"; // Change le contenu du h2
+        // Ici, vous pouvez également choisir de masquer le div du panier ou d'autres éléments liés au panier
+        panierDiv.style.display = "none"; // Exemple pour cacher la div du panier
+        return; // Arrêtez l'exécution de la fonction ici
     }
     panier.forEach((pokemon) => {
         const pokemonElement = document.createElement("li");

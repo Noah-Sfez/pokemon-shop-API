@@ -91,9 +91,6 @@ tri.addEventListener("change", (event) => {
          });
      });
 
-
-
-
     // au click sur le bouton on passe à la page produits.html  
     
     const pokemonChoisi = document.querySelector("#exposition");
@@ -102,6 +99,7 @@ tri.addEventListener("change", (event) => {
     const pokemonImage = pokemonChoisi.querySelector("img").getAttribute("src");
     const pokemonName = pokemonChoisi.querySelector("span").textContent;
     const pokemonPrice = pokemonChoisi.querySelector("input").value;
+    const pokemonType = pokemonChoisi.getAttribute("data-type");
     
     // Effectuer la requête fetch et attendre les données
     fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonName)
@@ -114,7 +112,7 @@ tri.addEventListener("change", (event) => {
             console.log(localStorage.getItem("stats"));
 
             // Stocker les autres informations dans le local storage
-            const tableau = [pokemonName, pokemonPrice, pokemonImage];
+            const tableau = [pokemonName, pokemonPrice, pokemonImage, pokemonType];
             localStorage.setItem("pokemon", JSON.stringify(tableau));
             console.log(localStorage.getItem("pokemon"));
 
