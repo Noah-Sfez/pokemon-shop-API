@@ -5,107 +5,91 @@ localStorage.removeItem("tableau");
 localStorage.removeItem("stats");
 // 1. récupérer les données de l'api
 
+const colors = {
+    normal: '#A8A77A',
+    fire: '#EE8130',
+    water: '#6390F0',
+    electric: '#F7D02C',
+    grass: '#7AC74C',
+    ice: '#96D9D6',
+    fighting: '#C22E28',
+    poison: '#A33EA1',
+    ground: '#E2BF65',
+    psychic: '#F95587',
+    bug: '#A6B91A',
+    rock: '#B6A136',
+    ghost: '#735797',
+    dragon: '#6F35FC',
+    dark: '#705746',
+    steel: '#B7B7CE',
+    fairy: '#D685AD'
+    // ... autres types et couleurs
+};
+
 fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
-    .then((response) => response.json())
-    .then((data) => {
-        data.results.forEach((pokemon) => {
-            // créer une liste d'éléments dans la div id="exposition"
-            const exposition = document.querySelector("#exposition");
-            const pokemonElement = document.createElement("li");
-            pokemonElement.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                data.results.indexOf(pokemon) + 1
-            }.png" alt="pokemon" class="pokemonImage"><span>${pokemon.name}</span>`;
-            // Créer un input de type text les li et y mettre une valeur aléatoire entre 1 et 100 que l'on ne peut pas modifier
-            const input = document.createElement("input");
-            input.setAttribute("type", "text");
-            // mettre une valeur aléatoire entre 1 et 100 et y ajouter le signe $ après
-            input.value = Math.floor(Math.random() * 100) + " $";
-            input.setAttribute("readonly", true);
-            pokemonElement.appendChild(input);
-            // ajouter une balise <a> qui redirige vers la page produits.html avec comme texte "acheter" à chaque li
-            const button = document.createElement("button");
-            button.textContent = "Voir";
-            pokemonElement.appendChild(button);
-            exposition.appendChild(pokemonElement);
-        });
-    });
-
-     //Trier les pokemon du plus cher au moins cher et les afficher dans l'ordre dans l'index.html en utilisant le sélecteur select id="tri" en choisissant les options "plus" et "moins"
-    const tri = document.querySelector("#tri");
-    tri.addEventListener("change", (event) => {
+    .then(response => response.json())
+    .then(data => {
         const exposition = document.querySelector("#exposition");
-        const pokemonElement = exposition.querySelectorAll("li");
-        const tableau = [];
-        pokemonElement.forEach((pokemon) => {
-            const pokemonName = pokemon.querySelector("span").textContent;
-            const pokemonPrice = pokemon.querySelector("input").value;
-            const pokemonImage = pokemon.querySelector("img").getAttribute("src");
-            tableau.push({ name: pokemonName, price: pokemonPrice, image: pokemonImage });
-        });
-        // trier le tableau en fonction du prix
-        if (event.target.value === "plus") {
-            tableau.sort((a, b) => {
-                return parseInt(b.price) - parseInt(a.price);
-            });
-        } else if (event.target.value === "moins") {
-            tableau.sort((a, b) => {
-                return parseInt(a.price) - parseInt(b.price);
-            });
-        }
-        // vider la div #exposition
-        exposition.innerHTML = "";
-        // afficher les pokemons triés dans la div #exposition
-        tableau.forEach((pokemon) => {
-            const pokemonElement = document.createElement("li");
-            pokemonElement.innerHTML = `<img src="${pokemon.image}" alt="pokemon" class="pokemonImage"><span>${pokemon.name}</span>`;
-            // Créer un input de type text les li et y mettre une valeur aléatoire entre 1 et 100 que l'on ne peut pas modifier
-            const input = document.createElement("input");
-            input.setAttribute("type", "text");
-            // mettre une valeur aléatoire entre 1 et 100 et y ajouter le signe $ après
-            input.value = pokemon.price;
-            input.setAttribute("readonly", true);
-            pokemonElement.appendChild(input);
-            // ajouter une balise <a> qui redirige vers la page produits.html avec comme texte "acheter" à chaque li
-            const button = document.createElement("button");
-            button.textContent = "Voir";
-            pokemonElement.appendChild(button);
-            exposition.appendChild(pokemonElement);
-        });
-    });
-
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
-    .then((response) => response.json())
-    .then((data) => {
-        data.results.forEach((pokemon) => {
-            fetch(pokemon.url) // Récupérer les détails de chaque Pokémon
-                .then((response) => response.json())
-                .then((pokemonDetails) => {
-                    const exposition = document.querySelector("#exposition");
+        data.results.forEach(pokemon => {
+            fetch(pokemon.url)
+                .then(response => response.json())
+                .then(pokemonDetails => {
                     const pokemonElement = document.createElement("li");
-
-                    // Définir la couleur de fond en fonction du type principal du Pokémon
                     const type = pokemonDetails.types[0].type.name;
-                    console.log(type);
-                    const colors = {
-                        fire: '#F08030',
-                        water: '#6890F0',
-                        grass: '#78C850',
-                        electric: '#F8D030',
-                        psychic: '#F85888',
-                        // ... autres types et couleurs
-                    };
-                    console.log(colors[type]);
-                    
-
-                    pokemonElement.innerHTML = `<img src="${pokemonDetails.sprites.front_default}" alt="${type}" class="pokemonImage"><span>${pokemonDetails.name}</span>`;
+                    pokemonElement.setAttribute('data-type', type); // Ajoutez cette ligne pour stocker le type
                     pokemonElement.style.backgroundColor = colors[type] || '#FFF';
-
-                    // ... Reste du code pour ajouter l'input et le bouton
+                    
+                    // Création de l'élément `li` avec toutes les informations nécessaires
+                    pokemonElement.innerHTML = `
+                        <img src="${pokemonDetails.sprites.front_default}" alt="${type}" class="pokemonImage">
+                        <span>${pokemonDetails.name}</span>
+                        <input type="text" value="${Math.floor(Math.random() * 100) + " $"}" readonly>
+                        <button>Voir</button>
+                    `;
                     exposition.appendChild(pokemonElement);
                 });
         });
     });
 
+
+     //Trier les pokemon du plus cher au moins cher et les afficher dans l'ordre dans l'index.html en utilisant le sélecteur select id="tri" en choisissant les options "plus" et "moins"
+     const tri = document.querySelector("#tri");
+tri.addEventListener("change", (event) => {
+    const exposition = document.querySelector("#exposition");
+    const pokemonElements = exposition.querySelectorAll("li");
+    const tableau = [];
+
+    pokemonElements.forEach((element) => {
+        const pokemonName = element.querySelector("span").textContent;
+        const pokemonPrice = element.querySelector("input").value;
+        const pokemonImage = element.querySelector("img").getAttribute("src");
+        const pokemonType = element.getAttribute("data-type"); // Vous pouvez maintenant récupérer le type
+        tableau.push({ name: pokemonName, price: pokemonPrice, image: pokemonImage, type: pokemonType });
+    });
+     
+         // Trier le tableau en fonction du prix
+         tableau.sort((a, b) => {
+             const priceA = parseInt(a.price, 10);
+             const priceB = parseInt(b.price, 10);
+             return (event.target.value === "plus" ? priceB - priceA : priceA - priceB);
+         });
+     
+         // Vider la div #exposition
+         exposition.innerHTML = "";
+     
+         // Afficher les Pokémon triés dans la div #exposition
+         tableau.forEach((pokemon) => {
+             const pokemonElement = document.createElement("li");
+             pokemonElement.style.backgroundColor = colors[pokemon.type] || '#FFF'; // Appliquer la couleur de fond
+             pokemonElement.innerHTML = `
+                 <img src="${pokemon.image}" alt="${pokemon.type}" class="pokemonImage">
+                 <span>${pokemon.name}</span>
+                 <input type="text" value="${pokemon.price}" readonly>
+                 <button>Voir</button>
+             `;
+             exposition.appendChild(pokemonElement);
+         });
+     });
 
 
 

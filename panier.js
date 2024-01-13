@@ -1,3 +1,4 @@
+
 function panier() {
     const nbPanier = document.querySelector("#nb-panier");
     if (localStorage.getItem('panier') === null) {
