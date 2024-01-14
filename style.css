@@ -87,6 +87,24 @@ header nav p {
     gap: 0.5rem;
   }
 }
+.selectionPokemon select {
+  width: 200px;
+  height: 80px;
+  border: 1px solid rgba(204, 204, 204, 0);
+  border-radius: 5px;
+  background-color: transparent;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem;
+  padding: 1rem;
+}
+@media screen and (max-width: 560px) {
+  .selectionPokemon select {
+    width: 150px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
+}
 .selectionPokemon .multipleSelect {
   display: flex;
   gap: 2rem;
@@ -107,6 +125,11 @@ header nav p {
 }
 .selectionPokemon .multipleSelect button :hover {
   cursor: pointer;
+}
+@media screen and (max-width: 560px) {
+  .selectionPokemon .multipleSelect button {
+    font-size: 1rem;
+  }
 }
 
 select {
@@ -141,6 +164,13 @@ select {
     padding: 0.5rem;
   }
 }
+@media screen and (max-width: 560px) {
+  #exposition {
+    grid-gap: 0.5rem;
+    margin: 0.2rem;
+    padding: 0.5rem;
+  }
+}
 #exposition li {
   display: flex;
   list-style: none;
@@ -154,6 +184,11 @@ select {
 }
 #exposition li:hover {
   cursor: pointer;
+}
+@media screen and (max-width: 5600px) {
+  #exposition li {
+    padding: 0.5rem;
+  }
 }
 #exposition li span {
   font-size: 1.5rem;
@@ -190,8 +225,8 @@ select {
 }
 @media screen and (max-width: 560px) {
   .pokemonImage {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
   }
 }
 
