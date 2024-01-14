@@ -104,30 +104,26 @@ stats.forEach((stat, index) => {
             // Sauvegarde le panier mis à jour dans le local storage
             localStorage.setItem("panier", JSON.stringify(panier));
             console.log("Après mise à jour, panier contient : ", panier);
-            // Redirection vers la page panier.html après un court délai
-            setTimeout(() => {
-                window.location.href = "panier.html";
-            }, 500);
-        });
 
-        ajoutContinue.addEventListener("click", () => {
-            let panier = JSON.parse(localStorage.getItem("panier")) || [];
-            const nouveauPokemon = JSON.parse(localStorage.getItem("pokemon"));
-            if (nouveauPokemon === null) {
-                console.log("Aucun nouveau Pokémon à ajouter");
-                return;
-            }
-            // Crée un objet pour le nouveau pokémon
-            const pokemonData = {
-                name: nouveauPokemon[0],
-                price: nouveauPokemon[1],
-                image: nouveauPokemon[2]
-            };
-            panier.push(pokemonData);
-            localStorage.setItem("panier", JSON.stringify(panier));
+            const messageDiv = document.getElementById("message");
+            messageDiv.innerText = `${nouveauPokemon[0]} a été ajouté au panier`;
+            const messageContainer = document.getElementById("message-container");
+            messageContainer.style.display = "block";
+            messageDiv.classList.add("pop");
+
+            // Ajoute la classe fadeOut après un délai de 2 secondes
             setTimeout(() => {
-                window.location.href = "index.html";
-            }, 500);
+                messageDiv.classList.add("fadeOut");
+
+                // Cache le conteneur après la fin de l'animation fadeOut
+                setTimeout(() => {
+                    messageContainer.style.display = "none";
+                    messageDiv.classList.remove("pop", "fadeOut");
+
+                    // Redirection vers la page panier.html après la fin des animations
+                    window.location.href = "panier.html";
+                }, 1000); // 1 seconde pour l'animation fadeOut
+            }, 2000); // 2 secondes de délai après la fin de l'animation pop (1s)
         });
         
         
