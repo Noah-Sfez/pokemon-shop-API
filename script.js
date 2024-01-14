@@ -25,6 +25,7 @@ const colors = {
     fairy: '#D685AD'
 };
 
+function initialize() {
 fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
     .then(response => response.json())
     .then(data => {
@@ -48,36 +49,40 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
                 });
         });
     });
+}
+initialize();
 
-
-     
-     const tri = document.querySelector("#tri");
+    const tri = document.querySelector("#tri");
     tri.addEventListener("change", (event) => {
-    const exposition = document.querySelector("#exposition");
-    const pokemonElements = exposition.querySelectorAll("li");
-    const tableau = [];
+        const exposition = document.querySelector("#exposition");
+        const pokemonElements = exposition.querySelectorAll("li");
+        const tableau = [];
+        const selectedValue = event.target.value;
+        if (selectedValue === "default") {
+            exposition.innerHTML = "";
+            initialize();
+        } else {
 
-    pokemonElements.forEach((element) => {
-        const pokemonName = element.querySelector("span").textContent;
-        const pokemonPrice = element.querySelector("input").value;
-        const pokemonImage = element.querySelector("img").getAttribute("src");
-        const pokemonType = element.getAttribute("data-type"); 
-        tableau.push({ name: pokemonName, price: pokemonPrice, image: pokemonImage, type: pokemonType });
-    });
-     
-         
-         tableau.sort((a, b) => {
-             const priceA = parseInt(a.price, 10);
-             const priceB = parseInt(b.price, 10);
-             return (event.target.value === "plus" ? priceB - priceA : priceA - priceB);
-         });
-     
-         
-         exposition.innerHTML = "";
-     
+        pokemonElements.forEach((element) => {
+            const pokemonName = element.querySelector("span").textContent;
+            const pokemonPrice = element.querySelector("input").value;
+            const pokemonImage = element.querySelector("img").getAttribute("src");
+            const pokemonType = element.getAttribute("data-type"); 
+            console.log(pokemonType);
+            tableau.push({ name: pokemonName, price: pokemonPrice, image: pokemonImage, type: pokemonType });
+        });
+        
+        tableau.sort((a, b) => {
+            const priceA = parseInt(a.price, 10);
+            const priceB = parseInt(b.price, 10);
+            return (event.target.value === "plus" ? priceB - priceA : priceA - priceB);
+        });
+    
+        exposition.innerHTML = "";
          
          tableau.forEach((pokemon) => {
              const pokemonElement = document.createElement("li");
+             pokemonElement.setAttribute('data-type', pokemon.type);
              pokemonElement.style.backgroundColor = colors[pokemon.type] || '#FFF'; 
              pokemonElement.innerHTML = `
                  <img src="${pokemon.image}" alt="${pokemon.type}" class="pokemonImage">
@@ -87,6 +92,7 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
              `;
              exposition.appendChild(pokemonElement);
          });
+        }
      });
 
     
@@ -112,7 +118,6 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
             localStorage.setItem("stats", JSON.stringify(stats));
             console.log(localStorage.getItem("stats"));
 
-            
             const tableau = [pokemonName, pokemonPrice, pokemonImage, pokemonType];
             localStorage.setItem("pokemon", JSON.stringify(tableau));
             console.log(localStorage.getItem("pokemon"));
