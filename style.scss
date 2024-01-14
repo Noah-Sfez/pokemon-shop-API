@@ -81,6 +81,17 @@ header {
 
 // Page : Accueil
 
+@keyframes shake {
+    0%, 100% { transform: rotate(1deg); }
+    25% { transform: rotate(-1deg); }
+    50% { transform: rotate(1deg); }
+    75% { transform: rotate(-1deg); }
+  }
+  
+  .shake {
+    animation: shake 0.4s infinite;
+  }
+
 .selectionPokemon {
     display: flex;
     justify-content: center;
@@ -241,7 +252,7 @@ select {
 // Page : Produit
 
 #message-container {
-    display: none; /* cache le conteneur initialement */
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -290,7 +301,7 @@ select {
     text-align: center;
     background-color: rgb(187, 15, 15);
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
-    opacity: 0; /* démarre transparent */
+    opacity: 0; 
     animation-fill-mode: forwards;
     font-size: 1.5rem;
 }

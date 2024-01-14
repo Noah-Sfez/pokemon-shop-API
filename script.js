@@ -1,9 +1,9 @@
 
-// vider le tableau "tableau" du local storage
+
 localStorage.removeItem("tableau");
-// vider le tableau "stats" du local storage
+
 localStorage.removeItem("stats");
-// 1. récupérer les données de l'api
+
 
 const colors = {
     normal: '#A8A77A',
@@ -23,7 +23,6 @@ const colors = {
     dark: '#705746',
     steel: '#B7B7CE',
     fairy: '#D685AD'
-    // ... autres types et couleurs
 };
 
 fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
@@ -36,10 +35,9 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
                 .then(pokemonDetails => {
                     const pokemonElement = document.createElement("li");
                     const type = pokemonDetails.types[0].type.name;
-                    pokemonElement.setAttribute('data-type', type); // Ajoutez cette ligne pour stocker le type
+                    pokemonElement.setAttribute('data-type', type); 
                     pokemonElement.style.backgroundColor = colors[type] || '#FFF';
                     
-                    // Création de l'élément `li` avec toutes les informations nécessaires
                     pokemonElement.innerHTML = `
                         <img src="${pokemonDetails.sprites.front_default}" alt="${type}" class="pokemonImage">
                         <span>${pokemonDetails.name}</span>
@@ -52,9 +50,9 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=160")
     });
 
 
-     //Trier les pokemon du plus cher au moins cher et les afficher dans l'ordre dans l'index.html en utilisant le sélecteur select id="tri" en choisissant les options "plus" et "moins"
+     
      const tri = document.querySelector("#tri");
-tri.addEventListener("change", (event) => {
+    tri.addEventListener("change", (event) => {
     const exposition = document.querySelector("#exposition");
     const pokemonElements = exposition.querySelectorAll("li");
     const tableau = [];
@@ -63,24 +61,24 @@ tri.addEventListener("change", (event) => {
         const pokemonName = element.querySelector("span").textContent;
         const pokemonPrice = element.querySelector("input").value;
         const pokemonImage = element.querySelector("img").getAttribute("src");
-        const pokemonType = element.getAttribute("data-type"); // Vous pouvez maintenant récupérer le type
+        const pokemonType = element.getAttribute("data-type"); 
         tableau.push({ name: pokemonName, price: pokemonPrice, image: pokemonImage, type: pokemonType });
     });
      
-         // Trier le tableau en fonction du prix
+         
          tableau.sort((a, b) => {
              const priceA = parseInt(a.price, 10);
              const priceB = parseInt(b.price, 10);
              return (event.target.value === "plus" ? priceB - priceA : priceA - priceB);
          });
      
-         // Vider la div #exposition
+         
          exposition.innerHTML = "";
      
-         // Afficher les Pokémon triés dans la div #exposition
+         
          tableau.forEach((pokemon) => {
              const pokemonElement = document.createElement("li");
-             pokemonElement.style.backgroundColor = colors[pokemon.type] || '#FFF'; // Appliquer la couleur de fond
+             pokemonElement.style.backgroundColor = colors[pokemon.type] || '#FFF'; 
              pokemonElement.innerHTML = `
                  <img src="${pokemon.image}" alt="${pokemon.type}" class="pokemonImage">
                  <span>${pokemon.name}</span>
@@ -91,7 +89,7 @@ tri.addEventListener("change", (event) => {
          });
      });
 
-    // au click sur le bouton on passe à la page produits.html  
+    
     let isSelectMode = false;
     const pokemonChoisi = document.querySelector("#exposition");
     pokemonChoisi.addEventListener("click", (event) => {
@@ -104,22 +102,22 @@ tri.addEventListener("change", (event) => {
     const pokemonPrice = pokemonChoisi.querySelector("input").value;
     const pokemonType = pokemonChoisi.getAttribute("data-type");
     
-    // Effectuer la requête fetch et attendre les données
+    
     fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonName)
         .then((response) => response.json())
         .then((data) => {
             const stats = data.stats.map(stat => stat.base_stat);
 
-            // Maintenant que vous avez les stats, vous pouvez les stocker dans le local storage
+            
             localStorage.setItem("stats", JSON.stringify(stats));
             console.log(localStorage.getItem("stats"));
 
-            // Stocker les autres informations dans le local storage
+            
             const tableau = [pokemonName, pokemonPrice, pokemonImage, pokemonType];
             localStorage.setItem("pokemon", JSON.stringify(tableau));
             console.log(localStorage.getItem("pokemon"));
 
-            // Redirection après un délai
+            
             setTimeout(() => {
                 window.location.href = "produits.html";
             }, 1000);
@@ -138,12 +136,12 @@ tri.addEventListener("change", (event) => {
         }
         const panier = JSON.parse(localStorage.getItem('panier'));
         const nbPokemon = panier.length / 1;
-        // On affiche le nombre de Pokémon dans le panier dans l'élément 'nb-panier'
+        
         nbPanier.textContent = nbPokemon;
-        // On affiche le panier dans la console
+        
         console.log(panier);
       }
-      panier(); // Don't forget to call the function
+      panier(); 
 
 
 
@@ -152,20 +150,17 @@ tri.addEventListener("change", (event) => {
         const selectButton = document.getElementById('select-pokemon');
         const addToCartButton = document.getElementById('add-to-cart');
         const exposition = document.querySelector("#exposition");
-        const nbrSelected = document.getElementById('nbrSelected'); 
     
         selectButton.addEventListener('click', () => {
-            isSelectMode = !isSelectMode; // Basculez l'état du mode
+            isSelectMode = !isSelectMode; 
             selectButton.textContent = isSelectMode ? "Désélectionner" : "Sélectionner";
             const allPokemon = exposition.querySelectorAll("li");
-        
             if (isSelectMode) {
-                // Mode Sélectionner
                 selectButton.textContent = "Désélectionner";
                 addToCartButton.style.display = 'block';
         
                 allPokemon.forEach(pokemonElement => {
-                    // Créer et ajouter la checkbox si elle n'existe pas déjà
+                    
                     let checkbox = pokemonElement.querySelector('.pokemon-checkbox');
                     if (!checkbox) {
                         checkbox = document.createElement('input');
@@ -174,22 +169,23 @@ tri.addEventListener("change", (event) => {
                         pokemonElement.insertBefore(checkbox, pokemonElement.firstChild);
                     }
                     
-                    // Ajouter un écouteur d'événements pour la case à cocher
+                    
                     checkbox.addEventListener('change', function() {
                         if (this.checked) {
-                            pokemonElement.classList.add('checked-pokemon');
+                            pokemonElement.classList.add('checked-pokemon', 'shake');
                         } else {
                             pokemonElement.classList.remove('checked-pokemon');
+                            pokemonElement.classList.remove('shake');
                         }
                     });
                 });
             } else {
-                // Mode Désélectionner
+                
                 selectButton.textContent = "Sélectionner";
                 addToCartButton.style.display = 'none';
         
                 allPokemon.forEach(pokemonElement => {
-                    pokemonElement.classList.remove('checked-pokemon'); // Retirer la classe lors de la désélection
+                    pokemonElement.classList.remove('checked-pokemon'); 
                     const checkbox = pokemonElement.querySelector('.pokemon-checkbox');
                     if (checkbox) {
                         checkbox.parentElement.removeChild(checkbox);
@@ -199,37 +195,34 @@ tri.addEventListener("change", (event) => {
         });
     
         addToCartButton.addEventListener('click', () => {
-            // ... Votre logique pour ajouter au panier ...
+            
             let panier = JSON.parse(localStorage.getItem("panier")) || [];
 
-    // Récupérer tous les Pokémon sélectionnés
-    const selectedCheckboxes = document.querySelectorAll(".pokemon-checkbox:checked");
-    selectedCheckboxes.forEach(checkbox => {
-        const pokemonElement = checkbox.closest('li');
-        const pokemonName = pokemonElement.querySelector("span").textContent;
-        const pokemonPrice = pokemonElement.querySelector("input[type='text']").value;
-        const pokemonImage = pokemonElement.querySelector("img").getAttribute("src");
-        // Créer un objet pour le Pokémon sélectionné
-        const pokemonData = {
-            name: pokemonName,
-            price: pokemonPrice,
-            image: pokemonImage
-        };
-        // Ajouter le Pokémon au panier
-        panier.push(pokemonData);
+            const selectedCheckboxes = document.querySelectorAll(".pokemon-checkbox:checked");
+            selectedCheckboxes.forEach(checkbox => {
+            const pokemonElement = checkbox.closest('li');
+            const pokemonName = pokemonElement.querySelector("span").textContent;
+            const pokemonPrice = pokemonElement.querySelector("input[type='text']").value;
+            const pokemonImage = pokemonElement.querySelector("img").getAttribute("src");
+            const pokemonData = {
+                name: pokemonName,
+                price: pokemonPrice,
+                image: pokemonImage
+            };
+            panier.push(pokemonData);
     });
 
-    // Vérifier s'il y a des Pokémon sélectionnés
+    
     if (panier.length === 0) {
         console.log("Aucun Pokémon sélectionné à ajouter au panier");
         return;
     }
 
-    // Sauvegarder le panier mis à jour dans le localStorage
+    
     localStorage.setItem("panier", JSON.stringify(panier));
     console.log("Après mise à jour, panier contient : ", panier);
 
-    // Redirection vers la page panier.html après un court délai
+    
     setTimeout(() => {
         window.location.href = "panier.html";
     }, 500);
