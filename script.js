@@ -191,6 +191,7 @@ initialize();
         
                 allPokemon.forEach(pokemonElement => {
                     pokemonElement.classList.remove('checked-pokemon'); 
+                    pokemonElement.classList.remove('shake');
                     const checkbox = pokemonElement.querySelector('.pokemon-checkbox');
                     if (checkbox) {
                         checkbox.parentElement.removeChild(checkbox);
